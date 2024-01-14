@@ -9,4 +9,4 @@ This patch that allows Steam Workshop Mods to be used in co-op.
 - [[1.4.21] [PC] (Modded) Skins are not working for co-op players.](https://forum.terratechgame.com/index.php?threads/1-4-21-pc-modded-skins-are-not-working-for-co-op-players.23187/)
 
 ### Steam Workshop Link
-- [Multiplayer Mod Patch](https://steamcommunity.com/sharedfiles/filedetails/?id=)
+- [Multiplayer Mod Patch](https://steamcommunity.com/sharedfiles/filedetails/?id=3139179410)
