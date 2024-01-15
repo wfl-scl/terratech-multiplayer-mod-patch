@@ -3,10 +3,13 @@ using System.Collections.Generic;
 
 namespace MultiplayerModPatch.Patches;
 
-[HarmonyPatch(typeof(ManMods), nameof(ManMods.WriteLobbySession))]
+[HarmonyPatch(typeof(ManMods), nameof(ManMods.PreLobbyCreated))]
 internal class LoadModSessionInfo {
 
-	public static void Prefix() {
+	public static void Postfix(
+		ModSessionInfo ___m_CurrentLobbySession,
+		Dictionary<string, ModContainer> ___m_Mods
+	) {
 		var nextModeSetting = ManGameMode.inst.NextModeSetting;
 
 		// セーブデータはまだ読まれてないので読む必要がある
@@ -29,18 +32,18 @@ internal class LoadModSessionInfo {
 			var saveData = ManSaveGame.LoadSaveData(savePath);
 
 			if (saveData.State.GetSaveData<ModSessionInfo>(ManSaveGame.SaveDataJSONType.ManMods, out var modSessionInfo)) {
-				Mod.ManModsHelper.m_CurrentLobbySession = modSessionInfo;
+				___m_CurrentLobbySession.AddIDsFrom(modSessionInfo);
 			}
 		}
 
-		UpdateLobbySession(Mod.ManModsHelper.m_CurrentLobbySession);
+		updateLobbySession(___m_CurrentLobbySession, ___m_Mods);
 	}
 
-	public static void UpdateLobbySession(ModSessionInfo sessionInfo) {
+	private static void updateLobbySession(ModSessionInfo sessionInfo, Dictionary<string, ModContainer> mods) {
 		Dictionary<string, string> corpModIds = [];
 		Dictionary<string, List<string>> skinsToAssign = [];
 		List<string> blocksToAssign = [];
-		foreach (var mod in Mod.ManModsHelper.m_Mods) {
+		foreach (var mod in mods) {
 			var modId = mod.Key;
 			if (!mod.Value.IsRemote && sessionInfo.Mods.ContainsKey(modId)) {
 				foreach (var corp in mod.Value.Contents.m_Corps) {
