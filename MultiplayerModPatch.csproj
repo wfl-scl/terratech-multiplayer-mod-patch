@@ -16,6 +16,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Reference Include="3rdParty">
+			<HintPath>..\Managed\3rdParty.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
 		<Reference Include="Assembly-CSharp">
 			<HintPath>..\Managed\Assembly-CSharp.dll</HintPath>
 			<Private>False</Private>

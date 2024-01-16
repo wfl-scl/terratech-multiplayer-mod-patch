@@ -29,4 +29,16 @@ public class Mod : ModBase {
 
 	public override void DeInit() { }
 
+	public static ModContents? GetContents(ModSessionInfo? modSessionInfo) {
+		if (modSessionInfo == null) {
+			return null;
+		}
+		foreach (var modContainer in modSessionInfo) {
+			if (modContainer?.Script is Mod) {
+				return modContainer.Contents;
+			}
+		}
+		return null;
+	}
+
 }
