@@ -25,7 +25,8 @@ internal class LoadModSessionInfo {
 				savePath = saveWorkshopPath;
 			} else {
 				var loadSave = (UIScreenLoadSave)ManUI.inst.GetScreen(ManUI.ScreenType.LoadSave);
-				var activeSave = UIScreenLoadSaveHelper.ReflectionMembers.m_ActiveSave_Get(loadSave);
+				var activeSave = Traverse.Create(loadSave).Field<UISave>("m_ActiveSave").Value;
+
 				var gameType = activeSave.SaveInfo.m_GameType;
 				savePath = ManSaveGame.CreateGameSaveFilePath(gameType, saveName);
 			}

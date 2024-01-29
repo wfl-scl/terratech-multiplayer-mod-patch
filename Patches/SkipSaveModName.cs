@@ -7,7 +7,8 @@ namespace MultiplayerModPatch.Patches;
 internal class SkipSaveModName {
 
 	public static void Postfix(ref string ___m_ModNames) {
-		var contents = Mod.GetContents(Mod.ManModsHelper.m_CurrentSession);
+		var currentModSession = Traverse.Create(ManMods.inst).Field<ModSessionInfo>("m_CurrentSession").Value;
+		var contents = Mod.GetContents(currentModSession);
 		if (contents != null) {
 			// セーブデータには保存されないようにする
 			___m_ModNames = string.Join(
