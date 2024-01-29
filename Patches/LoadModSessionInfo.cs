@@ -33,11 +33,47 @@ internal class LoadModSessionInfo {
 			var saveData = ManSaveGame.LoadSaveData(savePath);
 
 			if (saveData.State.GetSaveData<ModSessionInfo>(ManSaveGame.SaveDataJSONType.ManMods, out var modSessionInfo)) {
-				___m_CurrentLobbySession.AddIDsFrom(modSessionInfo);
+				copyIDs(source: modSessionInfo, destination: ___m_CurrentLobbySession, overwrite: false);
 			}
 		}
 
 		updateLobbySession(___m_CurrentLobbySession, ___m_Mods);
+	}
+
+	private static void copyIDs(ModSessionInfo source, ModSessionInfo destination, bool overwrite) {
+		if (overwrite) {
+			destination.CorpIDs.Clear();
+			destination.SkinIDsByCorp.Clear();
+			destination.BlockIDs.Clear();
+		}
+		// Corps
+		foreach (var corp in source.CorpIDs) {
+			if (!destination.CorpIDs.ContainsKey(corp.Key)) {
+				destination.CorpIDs.Add(corp.Key, corp.Value);
+			}
+		}
+		// Skins
+		foreach (var corp in source.SkinIDsByCorp) {
+			if (destination.SkinIDsByCorp.TryGetValue(corp.Key, out var skinIDs)) {
+				if (skinIDs != null) {
+					foreach (var skin in corp.Value) {
+						if (!skinIDs.ContainsKey(skin.Key)) {
+							skinIDs.Add(skin.Key, skin.Value);
+						}
+					}
+				} else {
+					destination.SkinIDsByCorp[corp.Key] = corp.Value;
+				}
+			} else {
+				destination.SkinIDsByCorp.Add(corp.Key, corp.Value);
+			}
+		}
+		// Blocks
+		foreach (var block in source.BlockIDs) {
+			if (!destination.BlockIDs.ContainsKey(block.Key)) {
+				destination.BlockIDs.Add(block.Key, block.Value);
+			}
+		}
 	}
 
 	private static void updateLobbySession(ModSessionInfo sessionInfo, Dictionary<string, ModContainer> mods) {
