@@ -6,6 +6,7 @@ namespace MultiplayerModPatch.Patches;
 [HarmonyPatch(typeof(ManMods), nameof(ManMods.PreLobbyCreated))]
 internal class LoadModSessionInfo {
 
+	[HarmonyPriority(Priority.Last)]
 	public static void Postfix(
 		ModSessionInfo ___m_CurrentLobbySession,
 		Dictionary<string, ModContainer> ___m_Mods
