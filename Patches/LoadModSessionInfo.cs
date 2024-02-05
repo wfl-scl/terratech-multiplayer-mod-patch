@@ -110,7 +110,18 @@ internal class LoadModSessionInfo {
 		foreach (var item in corpModIds) {
 			corpsToAssign.Add(ModUtils.CreateCompoundId(item.Value, item.Key));
 		}
-		Mod.ManModsHelper.AutoAssignIDs(sessionInfo, corpsToAssign, skinsToAssign, blocksToAssign);
+
+		Traverse.Create(ManMods.inst)
+			.Method(
+				name: "AutoAssignIDs",
+				paramTypes: [
+					typeof(ModSessionInfo),
+					typeof(List<string>),
+					typeof(Dictionary<string, List<string>>),
+					typeof(List<string>)
+				]
+			)
+			.GetValue(sessionInfo, corpsToAssign, skinsToAssign, blocksToAssign);
 	}
 
 }
